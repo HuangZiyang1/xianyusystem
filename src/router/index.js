@@ -55,6 +55,21 @@ export const constantRoutes = [
     }]
   },
 
+  {
+    path: '/worktable',
+    component: Layout,
+    redirect: '/worktable/index',
+
+    children: [
+      {
+        path: 'index',
+        name: 'WorkTable',
+        component: () => import('@/views/worktable/index'),
+        meta: { title: '总工作台', icon: 'el-icon-menu' },
+      }
+    ]
+  },
+
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
