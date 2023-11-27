@@ -58,15 +58,33 @@ export const constantRoutes = [
   {
     path: '/worktable',
     component: Layout,
-    redirect: '/worktable/index',
-
+    redirect: '/worktable/search-book',
+    meta: { title: '总工作台', icon: 'el-icon-menu' },
     children: [
       {
-        path: 'index',
-        name: 'WorkTable',
-        component: () => import('@/views/worktable/index'),
-        meta: { title: '总工作台', icon: 'el-icon-menu' },
-      }
+        path: 'book',
+        name: 'SearchBook',
+        component: () => import('@/views/worktable/search-book'),
+        meta: { title: '查询书籍', icon: '' },
+      },
+      {
+        path: 'idle',
+        name: 'SearchIdle',
+        component: () => import('@/views/worktable/search-idle'),
+        meta: { title: '查询闲置', icon: '' },
+      },
+      {
+        path: 'service',
+        name: 'SearchService',
+        component: () => import('@/views/worktable/search-service'),
+        meta: { title: '查询服务', icon: '' },
+      },
+      {
+        path: 'user',
+        name: 'SearchUser',
+        component: () => import('@/views/worktable/search-user'),
+        meta: { title: '查询用户', icon: '' },
+      },
     ]
   },
 

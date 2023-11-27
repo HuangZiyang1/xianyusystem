@@ -181,7 +181,20 @@ export default {
         type: undefined,
         sort: '+id'
       },
-      importanceOptions: [1, 2, 3],
+      importanceOptions: [
+        {
+          typeId:1,
+          typeName: '书籍'
+        },
+        {
+          typeId:2,
+          typeName: '闲置'
+        },
+        {
+          typeId:3,
+          typeName: '服务'
+        }
+      ],
       calendarTypeOptions,
       sortOptions: [{ label: '正序', key: '+id' }, { label: '倒序', key: '-id' }],
       statusOptions: ['published', 'draft', 'deleted'],
