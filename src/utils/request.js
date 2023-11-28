@@ -4,13 +4,16 @@ import store from '@/store'
 import { getToken } from '@/utils/auth'
 
 // create an axios instance
+// 创建一个axios实例
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  baseURL: 'http://192.168.3.45:8080', // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 5000 // request timeout
+  timeout: 100000 // request timeout
 })
 
 // request interceptor
+// 请求拦截器
 service.interceptors.request.use(
   config => {
     // do something before request is sent
@@ -19,7 +22,8 @@ service.interceptors.request.use(
       // let each request carry token
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
-      config.headers['X-Token'] = getToken()
+      // config.headers['X-Token'] = getToken()
+      config.headers['Authorization'] = getToken()
     }
     return config
   },
@@ -31,6 +35,7 @@ service.interceptors.request.use(
 )
 
 // response interceptor
+// 响应拦截器
 service.interceptors.response.use(
   /**
    * If you want to get http information such as headers or status
@@ -44,9 +49,11 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
+    // res是服务器响应的结果
 
     // if the custom code is not 20000, it is judged as an error.
-    if (res.code !== 20000) {
+    if (res.code !== 200) {
+      //这里走进报错
       Message({
         message: res.message || 'Error',
         type: 'error',
@@ -68,6 +75,7 @@ service.interceptors.response.use(
       }
       return Promise.reject(new Error(res.message || 'Error'))
     } else {
+      // 服务器响应正常数据，状态码为200
       return res
     }
   },

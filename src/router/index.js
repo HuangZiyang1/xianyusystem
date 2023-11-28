@@ -87,6 +87,38 @@ export const constantRoutes = [
       },
     ]
   },
+  {
+    path: '/add',
+    component: Layout,
+    redirect: '/add/add-book',
+    meta: { title: '添加功能', icon: 'el-icon-menu' },
+    children: [
+      {
+        path: 'book',
+        name: 'AddBook',
+        component: () => import('@/views/worktable/add-book'),
+        meta: { title: '添加书籍', icon: '' },
+      },
+      {
+        path: 'idle',
+        name: 'AddIdle',
+        component: () => import('@/views/worktable/add-idle'),
+        meta: { title: '添加闲置', icon: '' },
+      },
+      {
+        path: 'service',
+        name: 'AddService',
+        component: () => import('@/views/worktable/add-service'),
+        meta: { title: '添加服务', icon: '' },
+      },
+      {
+        path: 'ad',
+        name: 'AddAd',
+        component: () => import('@/views/worktable/add-ad'),
+        meta: { title: '添加广告', icon: '' },
+      },
+    ]
+  },
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
