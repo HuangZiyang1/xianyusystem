@@ -33,10 +33,9 @@
       </el-table-column>
       <el-table-column label="闲置名称" width="500" align="center">
         <template slot-scope="{row}">
-          <el-row v-for="item in row.books" :key="item.bookId">
-            <span style="margin-right:6px;">闲置名称：{{ item.businessName }}</span>
+            <span style="margin-right:6px;">{{ row.businessName }}</span>
             <!-- <span>书籍ISBN号：{{ item.isbn }}</span> -->
-          </el-row>
+
         </template>
       </el-table-column>
       <el-table-column label="闲置简介" width="110" align="center">
