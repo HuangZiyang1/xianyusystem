@@ -41,7 +41,9 @@ export default {
       this.$store.dispatch('app/toggleSideBar')
     },
     async logout() {
+      // 派发一个user模块下面的logout action
       await this.$store.dispatch('user/logout')
+      // 跳转到登录页面
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     }
   }

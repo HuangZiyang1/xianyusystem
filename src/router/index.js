@@ -96,25 +96,25 @@ export const constantRoutes = [
       {
         path: 'book',
         name: 'AddBook',
-        component: () => import('@/views/worktable/add-book'),
+        component: () => import('@/views/add/add-book'),
         meta: { title: '添加书籍', icon: '' },
       },
       {
         path: 'idle',
         name: 'AddIdle',
-        component: () => import('@/views/worktable/add-idle'),
+        component: () => import('@/views/add/add-idle'),
         meta: { title: '添加闲置', icon: '' },
       },
       {
         path: 'service',
         name: 'AddService',
-        component: () => import('@/views/worktable/add-service'),
+        component: () => import('@/views/add/add-service'),
         meta: { title: '添加服务', icon: '' },
       },
       {
         path: 'ad',
         name: 'AddAd',
-        component: () => import('@/views/worktable/add-ad'),
+        component: () => import('@/views/add/add-ad'),
         meta: { title: '添加广告', icon: '' },
       },
     ]
@@ -122,6 +122,10 @@ export const constantRoutes = [
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
+]
+
+export const asyncRoutes = [
+  
 ]
 
 const createRouter = () => new Router({

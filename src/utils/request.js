@@ -6,8 +6,8 @@ import { getToken } from '@/utils/auth'
 // create an axios instance
 // 创建一个axios实例
 const service = axios.create({
-  // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
-  baseURL: 'http://192.168.3.45:8080', // url = base url + request url
+  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  // baseURL: 'http://192.168.3.45:8080', // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 100000 // request timeout
 })
@@ -73,7 +73,7 @@ service.interceptors.response.use(
           })
         })
       }
-      return Promise.reject(new Error(res.message || 'Error'))
+      return Promise.reject(new Error(res.msg || 'Error'))
     } else {
       // 服务器响应正常数据，状态码为200
       return res
