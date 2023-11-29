@@ -28,3 +28,23 @@ export function deleteByBookSuitId(suitId) {
     }
   })
 }
+
+export function topBook(suitId) {
+  return request({
+    url: '/admin/book/topBook',
+    method: 'post',
+    data: {
+      suitId
+    }
+  })
+}
+
+export function cancelTopBook(suitId) {
+  return request({
+    url: '/admin/book/cancelTopBook',
+    method: 'post',
+    data: {
+      suitId
+    }
+  })
+}

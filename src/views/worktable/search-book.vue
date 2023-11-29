@@ -66,6 +66,13 @@
       </el-table-column> -->
       <el-table-column label="操作" align="center" width="235" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
+          <!-- <div>{{ row }}</div> -->
+          <el-button v-if="row.isOnTop!=1" size="mini" type="primary" @click="handleTop(row,$index)">
+            置顶
+          </el-button>
+          <el-button v-if="row.isOnTop!=0" size="mini" type="info" @click="cancelTopBook(row,$index)">
+            取消置顶
+          </el-button>
           <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">
             删除
           </el-button>
@@ -78,7 +85,7 @@
 </template>
 
 <script>
-import { deleteByBookSuitId, fetchList,searchBook } from '@/api/book'
+import { deleteByBookSuitId, fetchList,searchBook,topBook,cancelTopBook } from '@/api/book'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
@@ -154,6 +161,41 @@ export default {
         this.list = this.allList
         console.log(err);
       })
+
+    },
+
+    handleTop(row, index) {
+      console.log(row.suitId);
+      topBook(row.suitId).then(response => {
+        console.log(response)
+        this.$notify({
+        title: '成功',
+        message: response.msg,
+        type: 'success',
+        duration: 2000
+      })
+      row.isOnTop = 1
+      }).catch(err => {
+        console.log(err);
+      })
+
+
+    },
+    cancelTopBook(row, index) {
+      console.log(row.suitId);
+      cancelTopBook(row.suitId).then(response => {
+        console.log(response)
+        this.$notify({
+        title: '成功',
+        message: response.msg,
+        type: 'success',
+        duration: 2000
+      })
+      row.isOnTop = 0
+      }).catch(err => {
+        console.log(err);
+      })
+
 
     },
 
