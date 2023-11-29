@@ -85,6 +85,12 @@ export const constantRoutes = [
         component: () => import('@/views/worktable/search-user'),
         meta: { title: '查询用户', icon: '' },
       },
+      {
+        path: 'template',
+        name: 'SearchTemplate',
+        component: () => import('@/views/worktable/search-template'),
+        meta: { title: 'mub', icon: '' },
+      }
     ]
   },
   {
@@ -125,7 +131,7 @@ export const constantRoutes = [
 ]
 
 export const asyncRoutes = [
-  
+
 ]
 
 const createRouter = () => new Router({

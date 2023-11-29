@@ -8,3 +8,21 @@ export function fetchList() {
     baseURL: 'http://192.168.3.45:8080'
   })
 }
+
+export function searchBook(searchBlank) {
+  return request({
+    url: '/admin/book/searchByTitleAndInfo',
+    method: 'get',
+    searchBlank
+  })
+}
+
+export function deleteByBookSuitId(suitId) {
+  return request({
+    url: '/admin/book/deleteByBookSuitId',
+    method: 'post',
+    data: {
+      suitId
+    }
+  })
+}
