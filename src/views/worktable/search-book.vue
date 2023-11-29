@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="搜索书籍标题、书籍简介" style="width: 150px;" class="filter-item" @keyup.enter.native="searchBlank"/>
+      <el-input v-model="listQuery.title" placeholder="搜索书籍标题、书籍简介" style="width: 320px;" class="filter-item" @keyup.enter.native="searchBlank" minlength="1" maxlength="32" show-word-limit/>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="searchBlank">
         搜索
       </el-button>
@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import { deleteByBookSuitId, fetchList } from '@/api/book'
+import { deleteByBookSuitId, fetchList,searchBook } from '@/api/book'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
@@ -92,6 +92,7 @@ export default {
       list: null,
       total: 0,
       listLoading: true,
+      allList: null,
       listQuery: {
         page: 1,
         limit: 20,
@@ -112,6 +113,7 @@ export default {
       this.listLoading = true
       fetchList().then(response => {
         this.list = response.data
+        this.allList = this.list
         setTimeout(() => {
           this.listLoading = false
         }, 1.5 * 1000)
@@ -128,18 +130,31 @@ export default {
     handleDelete(row, index) {
       console.log(row.suitId);
       deleteByBookSuitId(row.suitId).then(response => {
-          this.$notify({
-        title: 'Success',
+        console.log(response)
+        this.$notify({
+        title: '成功',
         message: response.msg,
         type: 'success',
         duration: 2000
       })
+      // 确定OK再删除
+      this.list.splice(index, 1)
+      }).catch(err => {
+        console.log(err);
       })
 
-      this.list.splice(index, 1)
+
     },
     searchBlank() {
-      // console.log(this.listQuery.title);
+      let title = this.listQuery.title
+      searchBook(title).then(response => {
+        console.log(response)
+        this.list = response.data
+      }).catch(err => {
+        this.list = this.allList
+        console.log(err);
+      })
+
     },
 
   },

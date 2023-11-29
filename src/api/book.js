@@ -5,7 +5,7 @@ export function fetchList() {
     url: '/admin/book/selectBookAll?currentPage=1&&pageSize=5',
     method: 'get',
     // params: query,
-    baseURL: 'http://192.168.3.45:8080'
+    // baseURL: 'http://192.168.3.133:8080'
   })
 }
 
@@ -13,7 +13,9 @@ export function searchBook(searchBlank) {
   return request({
     url: '/admin/book/searchByTitleAndInfo',
     method: 'get',
-    searchBlank
+    params:{
+      searchBlank
+    }
   })
 }
 
