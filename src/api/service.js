@@ -46,3 +46,21 @@ export function cancelTopBook(serviceId) {
     }
   })
 }
+
+export function uploadService(data) {
+  return request({
+    url: '/admin/service/insertService',
+    method: 'post',
+    data: {
+      serviceName: data.title,
+      isOnTop: data.isOnTop,
+      userId: 1,
+      highPrice: data.highPrice,
+      lowPrice: data.lowPrice,
+      title: '1',
+      info: data.info,
+      urlList: []
+    }
+  })
+}
+
