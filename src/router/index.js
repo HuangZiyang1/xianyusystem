@@ -58,7 +58,7 @@ export const constantRoutes = [
   {
     path: '/worktable',
     component: Layout,
-    redirect: '/worktable/search-book',
+    redirect: '/worktable/book',
     meta: { title: '总工作台', icon: 'el-icon-menu' },
     children: [
       {
@@ -97,7 +97,7 @@ export const constantRoutes = [
   {
     path: '/add',
     component: Layout,
-    redirect: '/add/add-book',
+    redirect: '/add/book',
     meta: { title: '添加功能', icon: 'el-icon-menu' },
     children: [
       {
