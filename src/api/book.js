@@ -48,3 +48,12 @@ export function cancelTopBook(suitId) {
     }
   })
 }
+
+// uploadBooks
+export function uploadBooks(data) {
+  return request({
+    url: '/admin/book/insertBookSuit',
+    method: 'post',
+    data
+  })
+}

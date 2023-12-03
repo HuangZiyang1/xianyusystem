@@ -92,7 +92,8 @@ export default {
         url: '',
         seq: '',
         endTime: ''
-      }
+      },
+      this.fileList = []
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
