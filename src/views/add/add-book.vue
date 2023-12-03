@@ -1,6 +1,6 @@
 <template>
   <div class="root" style="width:80%;margin-left:100px;margin-top:80px">
-    <el-row style="font-size:40px;margin-bottom:20px">添加书籍:书籍价格，介绍，图片，ISBN，书名</el-row>
+    <el-row style="font-size:40px;margin-bottom:20px">添加书籍:</el-row>
     <el-form ref="dynamicValidateForm" :model="dynamicValidateForm" label-width="120px" class="demo-dynamic">
       <el-form-item prop="info" label="书籍套装介绍" :rules="[{ required: true, message: '请输入书籍介绍', trigger: 'blur' }]">
         <el-input v-model="dynamicValidateForm.info" type="textarea" />
@@ -18,7 +18,7 @@
         v-for="(book, index) in dynamicValidateForm.books"
         :key="book.key"
         :label="'书籍' + (index + 1)"
-        :prop="'books.' + index + '.title'"
+        :prop="'books.' + index + '.title' && 'books.' + index + '.ISBN'"
         :rules="{
           required: true, message: '输入不能为空', trigger: 'blur'
         }"

@@ -49,10 +49,10 @@ export default {
       dynamicValidateForm: {
         businessName: '服务名',
         userId: 1,
-        title: '1',
-        info: '1',
-        lowPrice: 1,
-        highPrice: 2,
+        title: '',
+        info: '',
+        lowPrice: '',
+        highPrice: '',
         urlList: [],
         concact: ''
       },

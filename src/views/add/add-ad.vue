@@ -19,8 +19,11 @@
         </el-date-picker>
       </el-form-item>
       <el-form-item label="图片上传">
-        <el-upload class="upload-demo" action="#" :on-preview="handlePreview" :on-remove="handleRemove"
+        <el-upload class="upload-demo"
+        ref="upload"
+        action="#" :on-preview="handlePreview" :on-remove="handleRemove"
           :file-list="fileList" drag :before-upload="beforeUpload" accept=".jpg,.jpeg,.png,.bmp"
+          :auto-upload="false"
           :http-request="uploadRequest" list-type="picture">
           <div slot="tip" class="el-upload__tip">图片推荐尺寸长宽比为3：1</div>
         </el-upload>
@@ -59,7 +62,9 @@ export default {
   },
   methods: {
     submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
+      this.$refs.upload.submit()
+      setTimeout(() => {
+        this.$refs[formName].validate((valid) => {
         if (valid) {
           let endTime = this.$refs.dynamicValidateForm.model.endTime
           endTime =  endTime.replace(/(\d{4}-\d{2}-\d{2})-(\d{2}:\d{2}:\d{2})/, '$1 $2')
@@ -69,13 +74,13 @@ export default {
             console.log(response);
             alert('提交成功!')
           })
-
-
         } else {
           console.log('error submit!!')
           return false
         }
       })
+      },1000)
+
     },
     resetForm(formName) {
       this.dynamicValidateForm = {

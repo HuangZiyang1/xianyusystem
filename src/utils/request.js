@@ -50,12 +50,12 @@ service.interceptors.response.use(
   response => {
     const res = response.data
     // res是服务器响应的结果
-
+    console.log(response);
     // if the custom code is not 20000, it is judged as an error.
     if (res.code !== 200) {
       //这里走进报错
       Message({
-        message: res.message || 'Error',
+        message: res.msg || 'Error',
         type: 'error',
         duration: 5 * 1000
       })
