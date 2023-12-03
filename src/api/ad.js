@@ -8,7 +8,7 @@ export function fetchList() {
 }
 
 
-export function deleteByBookSuitId(imgId) {
+export function deleteByBookimgId(imgId) {
   return request({
     url: '/admin/indexImg/deleteIndexImg',
     method: 'get',

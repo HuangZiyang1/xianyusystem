@@ -46,3 +46,11 @@ export function cancelTopBook(businessId) {
     }
   })
 }
+
+export function uploadIdle(data) {
+  return request({
+    url: '/admin/freeBusiness/insertFreeBusinesses',
+    method: 'post',
+    data
+  })
+}

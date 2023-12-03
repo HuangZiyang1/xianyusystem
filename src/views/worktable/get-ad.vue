@@ -34,9 +34,10 @@
           <span>{{ row.endTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="广告展示的图片" width="110" align="center">
+      <el-table-column label="广告展示的图片" width="400" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.url }}</span>
+          <!-- <span>{{ row.url }}</span> -->
+          <img :src="row.url" alt="" style="width:300px;height:auto">
         </template>
       </el-table-column>
       <el-table-column label="广告跳转的地址（外链）" width="110" align="center">
@@ -58,7 +59,7 @@
 </template>
 
 <script>
-import { deleteByBookSuitId, fetchList,searchBook,topBook,cancelTopBook } from '@/api/book'
+import { deleteByBookimgId, fetchList,searchBook,topBook,cancelTopBook } from '@/api/ad'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
@@ -108,8 +109,9 @@ export default {
     },
 
     handleDelete(row, index) {
-      console.log(row.suitId);
-      deleteByBookSuitId(row.suitId).then(response => {
+      console.log(typeof(row.imgId));
+      console.log(row.imgId);
+      deleteByBookimgId(row.imgId).then(response => {
         console.log(response)
         this.$notify({
         title: '成功',
@@ -138,8 +140,8 @@ export default {
     },
 
     handleTop(row, index) {
-      console.log(row.suitId);
-      topBook(row.suitId).then(response => {
+      console.log(row.imgId);
+      topBook(row.imgId).then(response => {
         console.log(response)
         this.$notify({
         title: '成功',
@@ -155,8 +157,8 @@ export default {
 
     },
     cancelTopBook(row, index) {
-      console.log(row.suitId);
-      cancelTopBook(row.suitId).then(response => {
+      console.log(row.imgId);
+      cancelTopBook(row.imgId).then(response => {
         console.log(response)
         this.$notify({
         title: '成功',

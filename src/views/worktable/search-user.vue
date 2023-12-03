@@ -1,21 +1,14 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="搜索用户昵称" style="width: 320px;" class="filter-item" @keyup.enter.native="searchBlank" minlength="1" maxlength="32" show-word-limit/>
+      <el-input v-model="listQuery.title" placeholder="搜索用户昵称" style="width: 320px;" class="filter-item"
+        @keyup.enter.native="searchBlank" minlength="1" maxlength="32" show-word-limit />
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="searchBlank">
         搜索
       </el-button>
     </div>
 
-    <el-table
-      :key="tableKey"
-      v-loading="listLoading"
-      :data="list"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%;"
-    >
+    <el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%;">
       <el-table-column label="用户id" prop="id" sortable="custom" align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ row.userId }}</span>
@@ -33,8 +26,8 @@
       </el-table-column> -->
       <el-table-column label="用户名称" width="500" align="center">
         <template slot-scope="{row}">
-            <span style="margin-right:6px;">{{ row.nickName }}</span>
-            <!-- <span>书籍ISBN号：{{ item.isbn }}</span> -->
+          <span style="margin-right:6px;">{{ row.nickName }}</span>
+          <!-- <span>书籍ISBN号：{{ item.isbn }}</span> -->
         </template>
       </el-table-column>
       <el-table-column label="联系方式" width="110" align="center">
@@ -44,20 +37,21 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="235" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button v-if="row.status!='1'" size="mini" type="danger" @click="handleDelete(row,$index)">
+          <el-button v-if="row.status != '1'" size="mini" type="danger" @click="handleDelete(row, $index)">
             封禁
           </el-button>
-          <span v-if="row.status=='1'" style="color:red;font-size:20px">该用户已被封禁！</span>
+          <span v-if="row.status == '1'" style="color:red;font-size:20px">该用户已被封禁！</span>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    <pagination v-show="total > 0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit"
+      @pagination="getList" />
   </div>
 </template>
 
 <script>
-import { deleteByBookSuitId, fetchList,searchBook,topBook,cancelTopBook } from '@/api/finduser'
+import { deleteByBookSuitId, fetchList, searchBook, topBook, cancelTopBook } from '@/api/finduser'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
@@ -81,7 +75,7 @@ export default {
         sort: '+id'
       },
       downloadLoading: false,
-      picList:[]
+      picList: []
     }
   },
   created() {
@@ -107,17 +101,30 @@ export default {
     },
 
     handleDelete(row, index) {
-      deleteByBookSuitId(row.userId).then(response => {
-        console.log(response)
-        this.$notify({
-        title: '成功',
-        message: response.msg,
-        type: 'success',
-        duration: 2000
+      this.$confirm('此操作将永久封禁该用户，是否确认？', '提示', {
+        confrimButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteByBookSuitId(row.userId).then(response => {
+          console.log(response)
+          this.$notify({
+            title: '成功',
+            message: response.msg,
+            type: 'success',
+            duration: 2000
+          })
+          row.status = 1
+        }).catch(err => {
+          console.log(err);
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
       })
-      }).catch(err => {
-        console.log(err);
-      })
+
 
 
     },
@@ -137,12 +144,12 @@ export default {
       topBook(row.userId).then(response => {
         console.log(response)
         this.$notify({
-        title: '成功',
-        message: response.msg,
-        type: 'success',
-        duration: 2000
-      })
-      row.isOnTop = 1
+          title: '成功',
+          message: response.msg,
+          type: 'success',
+          duration: 2000
+        })
+        row.isOnTop = 1
       }).catch(err => {
         console.log(err);
       })
@@ -154,12 +161,12 @@ export default {
       cancelTopBook(row.userId).then(response => {
         console.log(response)
         this.$notify({
-        title: '成功',
-        message: response.msg,
-        type: 'success',
-        duration: 2000
-      })
-      row.isOnTop = 0
+          title: '成功',
+          message: response.msg,
+          type: 'success',
+          duration: 2000
+        })
+        row.isOnTop = 0
       }).catch(err => {
         console.log(err);
       })

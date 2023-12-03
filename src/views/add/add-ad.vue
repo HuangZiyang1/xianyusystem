@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { uploadPic, uploadAd } from '@/api/ad'
+import { uploadAd } from '@/api/ad'
 import { getToken } from '@/utils/auth'
 import { upLoadFile } from '@/api/uploadFile'
 export default {

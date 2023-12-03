@@ -80,12 +80,18 @@ export const constantRoutes = [
         meta: { title: '查询服务', icon: '' },
       },
       {
+        path: 'ad',
+        name: 'SearchAd',
+        component: () => import('@/views/worktable/get-ad'),
+        meta: { title: '查看广告', icon: '' },
+      },
+      {
         path: 'user',
         name: 'SearchUser',
         component: () => import('@/views/worktable/search-user'),
         meta: { title: '查询用户', icon: '' },
       },
-     
+
     ]
   },
   {
