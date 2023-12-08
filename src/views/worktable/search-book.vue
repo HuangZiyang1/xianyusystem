@@ -65,12 +65,7 @@
           <span class="link-type">{{ row.pageView }}</span>
         </template>
       </el-table-column>
-      <!-- <el-table-column label="收藏数" align="center" width="65">
-        <template slot-scope="{row}">
-          <span class="link-type">{{ row.isCollection }}</span>
-        </template>
-      </el-table-column> -->
-      <el-table-column label="操作" align="center" width="235" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="185" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <!-- <div>{{ row }}</div> -->
           <el-button v-if="row.isOnTop != 1" size="mini" type="primary" @click="handleTop(row, $index)">
