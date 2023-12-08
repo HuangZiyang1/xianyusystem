@@ -1,8 +1,8 @@
 <template>
   <div class="root" style="width:80%;margin-left:100px;margin-top:80px">
     <el-row style="font-size:40px;margin-bottom:20px">添加书籍:</el-row>
-    <el-form ref="dynamicValidateForm" :model="dynamicValidateForm" label-width="120px" class="demo-dynamic">
-      <el-form-item prop="info" label="书籍套装标题" :rules="[{ required: true, message: '请输入书籍套装标题', trigger: 'blur' }]">
+    <el-form ref="dynamicValidateForm" :model="dynamicValidateForm" label-width="160px" class="demo-dynamic">
+      <el-form-item prop="title" label="书籍套装标题" :rules="[{ required: true, message: '请输入书籍套装标题', trigger: 'blur' }]">
         <el-input v-model="dynamicValidateForm.title" />
       </el-form-item>
       <el-form-item prop="info" label="书籍套装介绍" :rules="[{ required: true, message: '请输入书籍介绍', trigger: 'blur' }]">
@@ -17,9 +17,9 @@
       <el-form-item label="联系方式" prop="concact">
         <el-input v-model="dynamicValidateForm.concact" placeholder="若不填，则为默认联系方式" />
       </el-form-item>
-      <el-form-item label="图片上传" prop="pictures">
-        <el-upload class="upload-demo" ref="upload" action="#" :on-preview="handlePreview" :on-remove="handleRemove"
-          :file-list="fileList" drag :before-upload="beforeUpload" accept=".jpg,.jpeg,.png,.bmp"
+      <el-form-item label="图片上传(最多9张)" prop="urlList" :rules="[{required: true, message: '请上传图片'}]">
+        <el-upload class="upload-demo" ref="upload" action="#" :limit='9'
+          :file-list="fileList" drag accept=".jpg,.jpeg,.png,.bmp"
           :http-request="uploadRequest" :auto-upload="false" list-type="picture">
           <div slot="tip" class="el-upload__tip"></div>
         </el-upload>
@@ -54,7 +54,7 @@ export default {
       dynamicValidateForm: {
         books: [{
           bookName: '1',
-          isbn: '1',
+          isbn: '1234567890000',
           publishingHouse: '1'
         }],
         info: '1',
@@ -84,6 +84,13 @@ export default {
       })
     },
     submitForm(formName) {
+      if (this.dynamicValidateForm.urlList[0] === '') {
+        this.$message({
+          message: '没有上传图片',
+          type: 'info'
+        })
+        return
+      }
       this.$refs.upload.submit()
       setTimeout(() => {
         this.$refs[formName].validate((valid) => {
@@ -102,6 +109,7 @@ export default {
               console.log(response);
               console.log(this.$refs.dynamicValidateForm.model)
               alert('提交成功!')
+              this.resetForm()
             }).catch(err => {
               console.log(err);
             })
@@ -111,7 +119,6 @@ export default {
           }
         })
       }, 1000)
-
     },
     resetForm(formName) {
       this.dynamicValidateForm = {
