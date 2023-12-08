@@ -14,6 +14,10 @@
       <el-form-item label="最高价格" prop="highPrice" :rules="[{type:'number', required: true, message: '请输入最高价格，且价格必须为数字', trigger: 'blur' ,whitespace:[{type: 'string', message: '只存在空格', whitespace: true, trigger: ['change','blur']}]}]">
         <el-input v-model.number="dynamicValidateForm.highPrice" />
       </el-form-item>
+      <el-form-item label="是否置顶" prop="isOnTop">
+        <el-switch v-model="dynamicValidateForm.isOnTop" active-text="是" inactive-text="否">
+        </el-switch>
+      </el-form-item>
       <el-form-item label="联系方式" prop="concact">
         <el-input v-model="dynamicValidateForm.concact" placeholder="若不填，则为默认联系方式" />
       </el-form-item>
@@ -53,16 +57,17 @@ export default {
     return {
       dynamicValidateForm: {
         books: [{
-          bookName: '1',
-          isbn: '1234567890000',
+          bookName: '',
+          isbn: '',
           publishingHouse: '1'
         }],
-        info: '1',
-        lowPrice: 1,
-        highPrice: 2,
+        info: '',
+        lowPrice: '',
+        highPrice: '',
         urlList: [],
         concact: '',
-        title: '书籍标题'
+        title: '',
+        isOnTop: 0,
       },
       fileList: [],
       token: getToken(),
@@ -76,12 +81,19 @@ export default {
       }
     },
     addDomain() {
-      this.dynamicValidateForm.books.push({
+      if (this.dynamicValidateForm.books.length < 20) {
+        this.dynamicValidateForm.books.push({
         title: '',
         ISBN: '',
         publishingHouse: '1'
-        // key: Date.now()
       })
+      }else {
+        this.$message({
+          message: '一次性上传书籍过多!',
+          type: 'info'
+        })
+      }
+
     },
     submitForm(formName) {
       if (this.dynamicValidateForm.urlList[0] === '') {
@@ -95,6 +107,11 @@ export default {
       setTimeout(() => {
         this.$refs[formName].validate((valid) => {
           if (valid) {
+            if(this.$refs.dynamicValidateForm.model.isOnTop === true) {
+            this.$refs.dynamicValidateForm.model.isOnTop = 1
+          }else {
+            this.$refs.dynamicValidateForm.model.isOnTop = 0
+          }
             const model = this.$refs.dynamicValidateForm.model
             const data = {
               book: model.books,
@@ -103,11 +120,11 @@ export default {
               highPrice: model.highPrice,
               urlList: model.urlList,
               concact: model.concact,
-              title: model.title
+              title: model.title,
+              isOnTop: model.isOnTop
             }
             uploadBooks(data).then(response => {
-              console.log(response);
-              console.log(this.$refs.dynamicValidateForm.model)
+              console.log(data);
               alert('提交成功!')
               this.resetForm()
             }).catch(err => {
@@ -131,7 +148,8 @@ export default {
         lowPrice: '',
         highPrice: '',
         urlList: [],
-        title: ''
+        title: '',
+        isOnTop: 0
       },
         this.fileList = []
     },

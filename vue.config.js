@@ -46,6 +46,7 @@ module.exports = {
     proxy: { // 配置反向代理
       [process.env.VUE_APP_BASE_API]: { // "/api"自定义的请求路径地址
         target: 'http://211.159.182.127:8080',
+        // target: 'http://192.168.3.45:8080',
         changeOrigin: true, // 是否进行跨域 ture是  false不是
         pathRewrite: { // 路径重写
           ['^' + process.env.VUE_APP_BASE_API]: '/'

@@ -1,29 +1,26 @@
 <template>
   <div class="root" style="width:80%;margin-left:100px;margin-top:80px">
     <el-row style="font-size:40px;margin-bottom:20px">添加广告:</el-row>
-    <el-form ref="dynamicValidateForm" :model="dynamicValidateForm" label-width="120px" class="demo-dynamic">
+    <el-form ref="dynamicValidateForm" :model="dynamicValidateForm" label-width="160px" class="demo-dynamic">
       <el-form-item prop="title" label="广告标题" :rules="[{ required: true, message: '请输入广告标题', trigger: 'blur' }]">
         <el-input v-model="dynamicValidateForm.title" />
       </el-form-item>
       <el-form-item prop="info" label="广告信息" :rules="[{ required: true, message: '请输入广告信息', trigger: 'blur' }]">
         <el-input v-model="dynamicValidateForm.info" />
       </el-form-item>
-      <el-form-item prop="link" label="广告跳转链接" :rules="[{ required: true, message: '请输入广告跳转链接', trigger: 'blur' }]">
-        <el-input v-model="dynamicValidateForm.link" />
-      </el-form-item>
-      <el-form-item prop="url" label="广告图片地址" :rules="[{ required: true, message: '请输入广告图片地址', trigger: 'blur' }]">
-        <el-input v-model="dynamicValidateForm.url" />
-      </el-form-item>
       <el-form-item prop="endTime" label="截止时间" :rules="[{ required: true, message: '请输入广告截止时间', trigger: 'blur' }]">
         <el-date-picker v-model="dynamicValidateForm.endTime" type="datetime" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd-HH:mm:ss"  placeholder="选择日期时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="图片上传">
+      <el-form-item label="图片上传(最多一张)" prop="url" :rules="[{required: true, message: '请上传图片'}]">
         <el-upload class="upload-demo"
         ref="upload"
-        action="#" :on-preview="handlePreview" :on-remove="handleRemove"
-          :file-list="fileList" drag :before-upload="beforeUpload" accept=".jpg,.jpeg,.png,.bmp"
+        action="#"
+          :file-list="fileList"
+          drag
+          accept=".jpg,.jpeg,.png,.bmp"
           :auto-upload="false"
+          :limit="1"
           :http-request="uploadRequest" list-type="picture">
           <div slot="tip" class="el-upload__tip">图片推荐尺寸长宽比为3：1</div>
         </el-upload>
@@ -44,12 +41,11 @@ export default {
   data() {
     return {
       dynamicValidateForm: {
-        imgId: '1',
-        title: '1',
-        info: '1',
+        title: '',
+        info: '',
         status: '0',
-        link: '1',
-        url: '1',
+        link: 'www.baidu.com',
+        url: '',
         seq: '1',
         endTime: ''
       },
@@ -71,7 +67,9 @@ export default {
           const dataObj = this.$refs.dynamicValidateForm.model
           dataObj.endTime = endTime
           uploadAd(dataObj).then(response => {
+            console.log(dataObj);
             console.log(response);
+            this.resetForm()
             alert('提交成功!')
           })
         } else {
@@ -84,11 +82,10 @@ export default {
     },
     resetForm(formName) {
       this.dynamicValidateForm = {
-        imgId: '',
         title: '',
         info: '',
         status: '0',
-        link: '',
+        link: 'www.baidu.com',
         url: '',
         seq: '1',
         endTime: ''

@@ -27,7 +27,6 @@
           :auto-upload="false"
           :limit="9"
           list-type="picture">
-          <div slot="tip" class="el-upload__tip">图片推荐尺寸长宽比为3：1</div>
         </el-upload>
       </el-form-item>
 
