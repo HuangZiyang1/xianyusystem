@@ -32,6 +32,11 @@
           <img :src="row.pictures[0] ? 'http://211.159.182.127:8080' + row.pictures[0].url : ''" alt="图片无法显示" style="height:60px;width:auto">
         </template>
       </el-table-column>
+      <el-table-column label="书籍套装标题" width="110" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.title }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="书籍套装各书籍" width="500" align="center">
         <template slot-scope="{row}">
           <el-row v-for="item in row.books" :key="item.bookId">
