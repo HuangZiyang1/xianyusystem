@@ -1,7 +1,7 @@
 <template>
   <div class="root" style="width:80%;margin-left:100px;margin-top:80px">
     <el-row style="font-size:40px;margin-bottom:20px">添加闲置:</el-row>
-    <el-form ref="dynamicValidateForm" :model="dynamicValidateForm" label-width="120px" class="demo-dynamic">
+    <el-form ref="dynamicValidateForm" :model="dynamicValidateForm" label-width="160px" class="demo-dynamic">
       <el-form-item prop="title" label="闲置标题" :rules="[{ required: true, message: '请输入闲置标题', trigger: 'blur' }]">
         <el-input v-model="dynamicValidateForm.title" />
       </el-form-item>
@@ -15,13 +15,14 @@
         <el-input v-model.number="dynamicValidateForm.highPrice" />
       </el-form-item>
 
-      <el-form-item label="图片上传">
+      <el-form-item label="图片上传(最多九张)">
         <el-upload class="upload-demo"
           ref="upload"
-          action="#" :on-preview="handlePreview" :on-remove="handleRemove"
-          :file-list="fileList" drag :before-upload="beforeUpload" accept=".jpg,.jpeg,.png,.bmp"
+          action="#"
+          :file-list="fileList" drag accept=".jpg,.jpeg,.png,.bmp"
           :http-request="uploadRequest"
           :auto-upload="false"
+          :limit="9"
           list-type="picture">
           <div slot="tip" class="el-upload__tip">图片推荐尺寸长宽比为3：1</div>
         </el-upload>
@@ -72,9 +73,9 @@ export default {
       setTimeout(()=> {
         this.$refs[formName].validate((valid) => {
         if (valid) {
+          console.log(this.$refs.dynamicValidateForm.model);
            uploadIdle(this.$refs.dynamicValidateForm.model).then(response => {
-            console.log(response);
-            console.log(this.$refs.dynamicValidateForm.model)
+            this.resetForm()
             alert('提交成功!')
           }).catch(err => {
             console.log(err);
