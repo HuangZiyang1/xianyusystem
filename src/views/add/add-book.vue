@@ -117,7 +117,8 @@ export default {
       this.dynamicValidateForm = {
         books: [{
           bookName: '',
-          isbn: ''
+          isbn: '',
+          publishingHouse: '1'
         }],
         info: '',
         lowPrice: '',

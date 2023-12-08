@@ -1,22 +1,23 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="搜索书籍标题、书籍简介" style="width: 320px;" class="filter-item" @keyup.enter.native="searchBlank" minlength="1" maxlength="32" show-word-limit/>
+      <el-input v-model="listQuery.title" placeholder="搜索书籍标题、书籍简介" style="width: 320px;" class="filter-item"
+        @keyup.enter.native="searchBlank" minlength="1" maxlength="32" show-word-limit />
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="searchBlank">
         搜索
       </el-button>
     </div>
 
     <el-table
-      :key="tableKey"
-      v-loading="listLoading"
-      :data="list"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%;"
-    >
-      <el-table-column label="书籍套装id" prop="id" sortable="custom" align="center" width="120">
+    :key="tableKey"
+    v-loading="listLoading"
+    :data="list"
+    border
+    fit
+    highlight-current-row
+    :default-sort="{prop: 'suitId', order: 'descending'}"
+    style="width: 100%;">
+      <el-table-column label="书籍套装id" prop="suitId" sortable align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ row.suitId }}</span>
         </template>
@@ -28,7 +29,7 @@
       </el-table-column>
       <el-table-column label="书籍图片" min-width="120" width="150" style="display:flex;align-items: center;">
         <template slot-scope="{row}">
-          <img :src="row.pictures[0] ? row.pictures[0].url : ''" alt="" style="height:60px;width:auto">
+          <img :src="row.pictures[0] ? 'http://211.159.182.127:8080' + row.pictures[0].url : ''" alt="图片无法显示" style="height:60px;width:auto">
         </template>
       </el-table-column>
       <el-table-column label="书籍套装各书籍" width="500" align="center">
@@ -67,25 +68,26 @@
       <el-table-column label="操作" align="center" width="235" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <!-- <div>{{ row }}</div> -->
-          <el-button v-if="row.isOnTop!=1" size="mini" type="primary" @click="handleTop(row,$index)">
+          <el-button v-if="row.isOnTop != 1" size="mini" type="primary" @click="handleTop(row, $index)">
             置顶
           </el-button>
-          <el-button v-if="row.isOnTop!=0" size="mini" type="info" @click="cancelTopBook(row,$index)">
+          <el-button v-if="row.isOnTop != 0" size="mini" type="info" @click="cancelTopBook(row, $index)">
             取消置顶
           </el-button>
-          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">
+          <el-button v-if="row.status != 'deleted'" size="mini" type="danger" @click="handleDelete(row, $index)">
             删除
           </el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    <pagination v-show="total > 0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit"
+      @pagination="getList" />
   </div>
 </template>
 
 <script>
-import { deleteByBookSuitId, fetchList,searchBook,topBook,cancelTopBook } from '@/api/book'
+import { deleteByBookSuitId, fetchList, searchBook, topBook, cancelTopBook } from '@/api/book'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
@@ -103,13 +105,10 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        importance: undefined,
-        title: undefined,
-        type: undefined,
-        sort: '+id'
+        title: '',
       },
       downloadLoading: false,
-      picList:[]
+      picList: []
     }
   },
   created() {
@@ -135,21 +134,30 @@ export default {
     },
 
     handleDelete(row, index) {
-      console.log(row.suitId);
-      deleteByBookSuitId(row.suitId).then(response => {
-        console.log(response)
-        this.$notify({
-        title: '成功',
-        message: response.msg,
-        type: 'success',
-        duration: 2000
-      })
-      // 确定OK再删除
-      this.list.splice(index, 1)
-      }).catch(err => {
-        console.log(err);
-      })
+      // 二次确认
+      this.$confirm('此操作将永久删除该书籍套装, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteByBookSuitId(row.suitId).then(response => {
+          console.log(response)
+          // 确定OK再删除
+          this.$message({
+          type: 'success',
+          message: response.msg
+        });
+          this.list.splice(index, 1)
+        }).catch(err => {
+          console.log(err);
+        })
 
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
 
     },
     searchBlank() {
@@ -169,12 +177,12 @@ export default {
       topBook(row.suitId).then(response => {
         console.log(response)
         this.$notify({
-        title: '成功',
-        message: response.msg,
-        type: 'success',
-        duration: 2000
-      })
-      row.isOnTop = 1
+          title: '成功',
+          message: response.msg,
+          type: 'success',
+          duration: 2000
+        })
+        row.isOnTop = 1
       }).catch(err => {
         console.log(err);
       })
@@ -186,12 +194,12 @@ export default {
       cancelTopBook(row.suitId).then(response => {
         console.log(response)
         this.$notify({
-        title: '成功',
-        message: response.msg,
-        type: 'success',
-        duration: 2000
-      })
-      row.isOnTop = 0
+          title: '成功',
+          message: response.msg,
+          type: 'success',
+          duration: 2000
+        })
+        row.isOnTop = 0
       }).catch(err => {
         console.log(err);
       })

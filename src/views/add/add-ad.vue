@@ -90,7 +90,7 @@ export default {
         status: '0',
         link: '',
         url: '',
-        seq: '',
+        seq: '1',
         endTime: ''
       },
       this.fileList = []

@@ -7,14 +7,15 @@
       border
       fit
       highlight-current-row
+      :default-sort="{prop: 'imgId', order: 'descending'}"
       style="width: 100%;"
     >
-      <el-table-column label="广告id" prop="id" sortable="custom" align="center" width="120">
+      <el-table-column label="广告id" prop="imgId" sortable align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ row.imgId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="广告名称" prop="id" sortable="custom" align="center" width="120">
+      <el-table-column label="广告名称" align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ row.title }}</span>
         </template>
@@ -37,7 +38,7 @@
       <el-table-column label="广告展示的图片" width="400" align="center">
         <template slot-scope="{row}">
           <!-- <span>{{ row.url }}</span> -->
-          <img :src="row.url" alt="" style="width:300px;height:auto">
+          <img :src="row.url" alt="图片无法显示" style="width:300px;height:auto">
         </template>
       </el-table-column>
       <el-table-column label="广告跳转的地址（外链）" width="110" align="center">
@@ -47,7 +48,7 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="235" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button v-if="row.status!=1" size="mini" type="primary" @click="handleDelete(row,$index)">
+          <el-button v-if="row.status!=1" size="mini" type="danger" @click="handleDelete(row,$index)">
             删除
           </el-button>
         </template>
@@ -59,7 +60,7 @@
 </template>
 
 <script>
-import { deleteByBookimgId, fetchList,searchBook,topBook,cancelTopBook } from '@/api/ad'
+import { deleteByBookimgId, fetchList } from '@/api/ad'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
@@ -88,6 +89,7 @@ export default {
   },
   created() {
     this.getList()
+    console.log(this.list);
   },
   methods: {
     getList() {
@@ -100,30 +102,31 @@ export default {
         }, 1.5 * 1000)
       })
     },
-    handleModifyStatus(row, status) {
-      this.$message({
-        message: '操作Success',
-        type: 'success'
-      })
-      row.status = status
-    },
 
     handleDelete(row, index) {
-      console.log(typeof(row.imgId));
-      console.log(row.imgId);
-      deleteByBookimgId(row.imgId).then(response => {
-        console.log(response)
-        this.$notify({
-        title: '成功',
-        message: response.msg,
-        type: 'success',
-        duration: 2000
-      })
-      // 确定OK再删除
-      this.list.splice(index, 1)
-      }).catch(err => {
-        console.log(err);
-      })
+      this.$confirm('此操作将永久删除该广告, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteByBookimgId(row.imgId).then(response => {
+          console.log(response)
+          // 确定OK再删除
+          this.$message({
+          type: 'success',
+          message: response.msg
+        });
+          this.list.splice(index, 1)
+        }).catch(err => {
+          console.log(err);
+        })
+
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
 
 
     },

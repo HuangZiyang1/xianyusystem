@@ -14,9 +14,10 @@
       border
       fit
       highlight-current-row
+      :default-sort="{prop: 'serviceId', order: 'descending'}"
       style="width: 100%;"
     >
-      <el-table-column label="服务id" prop="id" sortable="custom" align="center" width="120">
+      <el-table-column label="服务id" prop="serviceId" sortable align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ row.serviceId }}</span>
         </template>
@@ -95,10 +96,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        importance: undefined,
-        title: undefined,
-        type: undefined,
-        sort: '+id'
+        title: '',
       },
       downloadLoading: false,
       picList:[]
@@ -118,28 +116,31 @@ export default {
         }, 1.5 * 1000)
       })
     },
-    handleModifyStatus(row, status) {
-      this.$message({
-        message: '操作Success',
-        type: 'success'
-      })
-      row.status = status
-    },
 
     handleDelete(row, index) {
-      deleteByBookSuitId(row.serviceId).then(response => {
-        console.log(response)
-        this.$notify({
-        title: '成功',
-        message: response.msg,
-        type: 'success',
-        duration: 2000
-      })
-      // 确定OK再删除
-      this.list.splice(index, 1)
-      }).catch(err => {
-        console.log(err);
-      })
+      this.$confirm('此操作将永久删除该服务, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteByBookSuitId(row.serviceId).then(response => {
+          console.log(response)
+          // 确定OK再删除
+          this.$message({
+          type: 'success',
+          message: response.msg
+        });
+          this.list.splice(index, 1)
+        }).catch(err => {
+          console.log(err);
+        })
+
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
 
 
     },

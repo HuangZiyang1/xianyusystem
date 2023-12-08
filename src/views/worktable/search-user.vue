@@ -8,8 +8,16 @@
       </el-button>
     </div>
 
-    <el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%;">
-      <el-table-column label="用户id" prop="id" sortable="custom" align="center" width="120">
+    <el-table
+    :key="tableKey"
+    v-loading="listLoading"
+    :data="list"
+    border
+    fit
+    highlight-current-row
+    :default-sort="{prop: 'userId', order: 'descending'}"
+    style="width: 100%;">
+      <el-table-column label="用户id" prop="userId" sortable align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ row.userId }}</span>
         </template>
@@ -69,10 +77,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        importance: undefined,
-        title: undefined,
-        type: undefined,
-        sort: '+id'
+        title: '',
       },
       downloadLoading: false,
       picList: []
@@ -91,13 +96,6 @@ export default {
           this.listLoading = false
         }, 1.5 * 1000)
       })
-    },
-    handleModifyStatus(row, status) {
-      this.$message({
-        message: '操作Success',
-        type: 'success'
-      })
-      row.status = status
     },
 
     handleDelete(row, index) {
@@ -121,7 +119,7 @@ export default {
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '已取消删除'
+          message: '已取消封禁'
         })
       })
 
