@@ -8,12 +8,18 @@
       <el-form-item prop="info" label="服务介绍" :rules="[{ required: true, message: '请输入服务介绍', trigger: 'blur' }]">
         <el-input v-model="dynamicValidateForm.info" type="textarea" />
       </el-form-item>
-      <el-form-item label="最低价格" prop="lowPrice"
+      <!-- <el-form-item label="最低价格" prop="lowPrice"
         :rules="[{ required: true, message: '请输入最低价格（数字）', trigger: 'blur' }, { type: 'number', message: '价格必须为数字' }]">
         <el-input v-model.number="dynamicValidateForm.lowPrice" />
       </el-form-item>
       <el-form-item label="最高价格" prop="highPrice"
         :rules="[{ required: true, message: '请输入最高价格（数字）', trigger: 'blur' }, { type: 'number', message: '价格必须为数字' }]">
+        <el-input v-model.number="dynamicValidateForm.highPrice" />
+      </el-form-item> -->
+      <el-form-item label="最低价格" prop="lowPrice" :rules="[{ type:'number',required: true, message: '请输入最低价格，且价格必须为数字', trigger: 'blur' }]">
+        <el-input v-model.number="dynamicValidateForm.lowPrice" />
+      </el-form-item>
+      <el-form-item label="最高价格" prop="highPrice" :rules="[{type:'number', required: true, message: '请输入最高价格，且价格必须为数字', trigger: 'blur' ,whitespace:[{type: 'string', message: '只存在空格', whitespace: true, trigger: ['change','blur']}]}]">
         <el-input v-model.number="dynamicValidateForm.highPrice" />
       </el-form-item>
       <el-form-item label="是否置顶" prop="isOnTop">
@@ -38,6 +44,7 @@ export default {
   data() {
     return {
       dynamicValidateForm: {
+        serviceName: '服务名',
         title: '',
         info: '',
         lowPrice: '',
@@ -64,7 +71,7 @@ export default {
             this.$refs.dynamicValidateForm.model.isOnTop = 0
           }
           uploadService(this.$refs.dynamicValidateForm.model).then(response => {
-            console.log(response);
+            this.resetForm()
             alert('提交成功!')
           }).catch(err => {
             console.log(err);
@@ -83,6 +90,7 @@ export default {
         highPrice: '',
         concact: '',
         isOnTop: 0,
+        serviceName: '服务名',
       }
     }
   }

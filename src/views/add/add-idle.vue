@@ -14,7 +14,10 @@
       <el-form-item label="最高价格" prop="highPrice" :rules="[{ required: true, message: '请输入最高价格', trigger: 'blur' }]">
         <el-input v-model.number="dynamicValidateForm.highPrice" />
       </el-form-item>
-
+      <el-form-item label="是否置顶" prop="isOnTop">
+        <el-switch v-model="dynamicValidateForm.isOnTop" active-text="是" inactive-text="否">
+        </el-switch>
+      </el-form-item>
       <el-form-item label="图片上传(最多九张)">
         <el-upload class="upload-demo"
           ref="upload"
@@ -48,32 +51,32 @@ export default {
   data() {
     return {
       dynamicValidateForm: {
-        businessName: '服务名',
+        businessName: '闲置名',
         userId: 1,
         title: '',
         info: '',
         lowPrice: '',
         highPrice: '',
         urlList: [],
-        concact: ''
+        concact: '',
+        isOnTop: 0,
       },
       fileList: [],
       token: getToken(),
     }
   },
   methods: {
-    removeBook(item) {
-      var index = this.dynamicValidateForm.books.indexOf(item)
-      if (index !== -1) {
-        this.dynamicValidateForm.books.splice(index, 1)
-      }
-    },
      submitForm(formName) {
       this.$refs.upload.submit()
       setTimeout(()=> {
         this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log(this.$refs.dynamicValidateForm.model);
+          if(this.$refs.dynamicValidateForm.model.isOnTop === true) {
+            this.$refs.dynamicValidateForm.model.isOnTop = 1
+          }else {
+            this.$refs.dynamicValidateForm.model.isOnTop = 0
+          }
            uploadIdle(this.$refs.dynamicValidateForm.model).then(response => {
             this.resetForm()
             alert('提交成功!')
@@ -97,7 +100,8 @@ export default {
         lowPrice: '',
         highPrice: '',
         urlList: [],
-        concact: ''
+        concact: '',
+        isOnTop: 0,
       }
       this.fileList = []
     },
