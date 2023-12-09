@@ -29,7 +29,7 @@
       </el-table-column>
       <el-table-column label="服务名称" width="500" align="center">
         <template slot-scope="{row}">
-            <span style="margin-right:6px;">{{ row.serviceName }}</span>
+            <span style="margin-right:6px;">{{ row.title }}</span>
         </template>
       </el-table-column>
       <el-table-column label="服务简介" width="110" align="center">

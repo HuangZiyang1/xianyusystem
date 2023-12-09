@@ -29,12 +29,12 @@
       </el-table-column>
       <el-table-column label="闲置图片" min-width="120" width="150" style="display:flex;align-items: center;">
         <template slot-scope="{row}">
-          <img :src="row.pictureList ? row.pictureList[0].url : ''" alt="" style="height:60px;width:auto">
+          <img :src="row.pictureList !== null ? row.pictureList[0] ? row.pictureList[0].url : '' : ''" alt="图片无法显示" style="height:60px;width:auto">
         </template>
       </el-table-column>
       <el-table-column label="闲置名称" width="500" align="center">
         <template slot-scope="{row}">
-            <span style="margin-right:6px;">{{ row.businessName }}</span>
+            <span style="margin-right:6px;">{{ row.title }}</span>
             <!-- <span>书籍ISBN号：{{ item.isbn }}</span> -->
 
         </template>
