@@ -29,7 +29,7 @@
       </el-table-column>
       <el-table-column label="书籍图片" min-width="120" width="150" style="display:flex;align-items: center;">
         <template slot-scope="{row}">
-          <img :src="row.pictures[0] ? 'http://211.159.182.127:8080' + row.pictures[0].url : ''" alt="图片无法显示" style="height:60px;width:auto">
+          <img :src="row.pictures[0] ? row.pictures[0].url : ''" alt="图片无法显示" style="height:60px;width:auto">
         </template>
       </el-table-column>
       <el-table-column label="书籍套装标题" width="110" align="center">
