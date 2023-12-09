@@ -21,9 +21,9 @@
       <el-form-item label="联系方式" prop="concact">
         <el-input v-model="dynamicValidateForm.concact" placeholder="若不填，则为默认联系方式" />
       </el-form-item>
-      <el-form-item label="图片上传(最多9张)" prop="urlList" :rules="[{required: true, message: '请上传图片'}]">
+      <el-form-item label="图片上传(最多9张)" :prop="'books.0'" :rules="[{required: true, message: '请上传图片'}]">
         <el-upload class="upload-demo" ref="upload" action="#" :limit='9'
-          :file-list="fileList" drag accept=".jpg,.jpeg,.png,.bmp"
+           drag accept=".jpg,.jpeg,.png,.bmp" multiple :on-change="changeFileLength"
           :http-request="uploadRequest" :auto-upload="false" list-type="picture">
           <div slot="tip" class="el-upload__tip"></div>
         </el-upload>
@@ -57,23 +57,28 @@ export default {
     return {
       dynamicValidateForm: {
         books: [{
-          bookName: '',
-          isbn: '',
+          bookName: '1',
+          isbn: '1234567890000',
           publishingHouse: '1'
         }],
-        info: '',
-        lowPrice: '',
-        highPrice: '',
+        info: '0',
+        lowPrice: 1,
+        highPrice: 2,
         urlList: [],
         concact: '',
-        title: '',
+        title: '666',
         isOnTop: 0,
       },
       fileList: [],
       token: getToken(),
+      filesLength: 0
     }
   },
   methods: {
+    changeFileLength(file, fileList) {
+      console.log(fileList);
+      this.filesLength = fileList.length
+    },
     removeBook(item) {
       if (this.dynamicValidateForm.books.length === 1) {
         this.$message({
@@ -103,48 +108,40 @@ export default {
 
     },
     submitForm(formName) {
-      if (this.dynamicValidateForm.urlList[0] === '') {
-        this.$message({
+      // if (this.dynamicValidateForm.urlList[0] === '') {
+      //   this.$message({
+      //     message: '没有上传图片',
+      //     type: 'info'
+      //   })
+      //   return
+      // }
+      // 校验一下状态
+      // const flag =
+
+      // console.log(flag);
+      // setTimeout(() => {
+        // console.log('666');
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.$refs.upload.submit()
+            // console.log('777');
+            console.log(this.dynamicValidateForm.urlList);
+            if (this.dynamicValidateForm.urlList.length === 0) {
+              if (this.filesLength === 0) {
+                this.$message({
           message: '没有上传图片',
           type: 'info'
         })
         return
+              }
+
       }
-      // 校验一下状态
-      const flag = this.$refs.upload.submit()
-      console.log(flag);
-      setTimeout(() => {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            if(this.$refs.dynamicValidateForm.model.isOnTop === true) {
-            this.$refs.dynamicValidateForm.model.isOnTop = 1
-          }else {
-            this.$refs.dynamicValidateForm.model.isOnTop = 0
-          }
-            const model = this.$refs.dynamicValidateForm.model
-            const data = {
-              book: model.books,
-              info: model.info,
-              lowPrice: model.lowPrice,
-              highPrice: model.highPrice,
-              urlList: model.urlList,
-              concact: model.concact,
-              title: model.title,
-              isOnTop: model.isOnTop
-            }
-            uploadBooks(data).then(response => {
-              console.log(data);
-              alert('提交成功!')
-              this.resetForm()
-            }).catch(err => {
-              console.log(err);
-            })
           } else {
             console.log('error submit!!')
             return false
           }
         })
-      }, 1000)
+      // }, 1000)
     },
     resetForm(formName) {
       this.dynamicValidateForm = {
@@ -161,18 +158,57 @@ export default {
         isOnTop: 0
       },
         this.fileList = []
+        this.filesLength = 0
     },
     uploadRequest(options) {
-      let file = options.file
-      let fd = new FormData();
-      fd.append('files', file)
-      console.log(fd);
-      upLoadFile(fd).then(response => {
+      // let file = options.file
+      // let fd = new FormData();
+      // fd.append('files', file)
+      // console.log(fd);
+
+      this.fileList.push(options.file)
+      console.log(this.fileList);
+      console.log('888');
+      if (this.fileList.length == this.filesLength) {
+        // 创建formdata并上传
+        let fd = new FormData()
+        this.fileList.forEach(file => {
+          fd.append('files', file)
+        })
+        upLoadFile(fd).then(response => {
         console.log(response);
-        this.dynamicValidateForm.urlList.push(response.urls)
+        // this.dynamicValidateForm.urlList.push(response.urls)
+        // 切割urls
+        this.dynamicValidateForm.urlList = response.urls.split(',')
+        if(this.$refs.dynamicValidateForm.model.isOnTop === true) {
+            this.$refs.dynamicValidateForm.model.isOnTop = 1
+          }else {
+            this.$refs.dynamicValidateForm.model.isOnTop = 0
+          }
+            const model = this.$refs.dynamicValidateForm.model
+            const data = {
+              book: model.books,
+              info: model.info,
+              lowPrice: model.lowPrice,
+              highPrice: model.highPrice,
+              urlList: model.urlList,
+              concact: model.concact,
+              title: model.title,
+              isOnTop: model.isOnTop
+            }
+            uploadBooks(data).then(response => {
+              // console.log(data);
+              alert('提交成功!')
+              this.$refs.upload.clearFiles()
+              this.resetForm()
+            }).catch(err => {
+              console.log(err);
+            })
       }).catch(err => {
         console.log(err);
       })
+      }
+
     }
   }
 

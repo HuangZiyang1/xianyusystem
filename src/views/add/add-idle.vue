@@ -14,10 +14,12 @@
       <el-form-item label="最高价格" prop="highPrice" :rules="[{ required: true, message: '请输入最高价格', trigger: 'blur' }]">
         <el-input v-model.number="dynamicValidateForm.highPrice" />
       </el-form-item> -->
-      <el-form-item label="最低价格" prop="lowPrice" :rules="[{ type:'number',required: true, message: '请输入最低价格，且价格必须为数字', trigger: 'blur' }]">
+      <el-form-item label="最低价格" prop="lowPrice"
+        :rules="[{ type: 'number', required: true, message: '请输入最低价格，且价格必须为数字', trigger: 'blur' }]">
         <el-input v-model.number="dynamicValidateForm.lowPrice" />
       </el-form-item>
-      <el-form-item label="最高价格" prop="highPrice" :rules="[{type:'number', required: true, message: '请输入最高价格，且价格必须为数字', trigger: 'blur' ,whitespace:[{type: 'string', message: '只存在空格', whitespace: true, trigger: ['change','blur']}]}]">
+      <el-form-item label="最高价格" prop="highPrice"
+        :rules="[{ type: 'number', required: true, message: '请输入最高价格，且价格必须为数字', trigger: 'blur', whitespace: [{ type: 'string', message: '只存在空格', whitespace: true, trigger: ['change', 'blur'] }] }]">
         <el-input v-model.number="dynamicValidateForm.highPrice" />
       </el-form-item>
       <el-form-item label="是否置顶" prop="isOnTop">
@@ -25,14 +27,8 @@
         </el-switch>
       </el-form-item>
       <el-form-item label="图片上传(最多九张)">
-        <el-upload class="upload-demo"
-          ref="upload"
-          action="#"
-          :file-list="fileList" drag accept=".jpg,.jpeg,.png,.bmp"
-          :http-request="uploadRequest"
-          :auto-upload="false"
-          :limit="9"
-          list-type="picture">
+        <el-upload class="upload-demo" ref="upload" action="#" drag accept=".jpg,.jpeg,.png,.bmp"
+          :http-request="uploadRequest" multiple :auto-upload="false" :limit="9" :on-change="changeFileLength" list-type="picture">
         </el-upload>
       </el-form-item>
 
@@ -58,42 +54,46 @@ export default {
       dynamicValidateForm: {
         businessName: '闲置名',
         userId: 1,
-        title: '',
-        info: '',
-        lowPrice: '',
-        highPrice: '',
+        title: '1',
+        info: '2',
+        lowPrice: 3,
+        highPrice: 4,
         urlList: [],
         concact: '',
         isOnTop: 0,
       },
       fileList: [],
       token: getToken(),
+      filesLength: 0
     }
   },
   methods: {
+    changeFileLength(file, fileList) {
+      console.log(fileList);
+      this.filesLength = fileList.length
+    },
      submitForm(formName) {
-      this.$refs.upload.submit()
-      setTimeout(()=> {
-        this.$refs[formName].validate((valid) => {
+
+
+      // setTimeout(()=> {
+      // 判断表单
+      this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log(this.$refs.dynamicValidateForm.model);
-          if(this.$refs.dynamicValidateForm.model.isOnTop === true) {
+          this.$refs.upload.submit()
+
+          if (this.$refs.dynamicValidateForm.model.isOnTop === true) {
             this.$refs.dynamicValidateForm.model.isOnTop = 1
-          }else {
+          } else {
             this.$refs.dynamicValidateForm.model.isOnTop = 0
           }
-           uploadIdle(this.$refs.dynamicValidateForm.model).then(response => {
-            this.resetForm()
-            alert('提交成功!')
-          }).catch(err => {
-            console.log(err);
-          })
+    
+
         } else {
           console.log('error submit!!')
           return false
         }
       })
-      },1000)
+      // },1000)
 
     },
     resetForm(formName) {
@@ -109,18 +109,37 @@ export default {
         isOnTop: 0,
       }
       this.fileList = []
+      this.filesLength = 0
     },
     uploadRequest(options) {
-      let file = options.file
-      let fd = new FormData();
-      fd.append('files', file)
-      console.log(fd);
-      upLoadFile(fd).then(response => {
-        console.log(response);
-        this.dynamicValidateForm.urlList.push(response.urls)
-      }).catch(err => {
-        console.log(err);
-      })
+      // let file = options.file
+      // let fd = new FormData();
+      // fd.append('files', file)
+      // console.log(fd);
+      this.fileList.push(options.file)
+      if (this.fileList.length == this.filesLength) {
+        // 创建FormData上传
+        let fd = new FormData()
+        this.fileList.forEach(file => {
+          fd.append('files', file)
+        })
+        upLoadFile(fd).then(response => {
+          console.log(response);
+          // this.dynamicValidateForm.urlList.push(response.urls)
+          // 切割urls
+          this.dynamicValidateForm.urlList = response.urls.split(',')
+          uploadIdle(this.$refs.dynamicValidateForm.model).then(response => {
+            this.resetForm()
+            alert('提交成功!')
+            this.$refs.upload.clearFiles()
+          }).catch(err => {
+            console.log(err);
+          })
+        }).catch(err => {
+          console.log(err);
+        })
+      }
+
     }
   }
 
