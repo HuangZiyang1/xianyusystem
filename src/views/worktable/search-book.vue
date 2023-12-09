@@ -82,7 +82,7 @@
     </el-table>
 
     <pagination :total="total" :page.sync="listQuery.currentPage" :limit.sync="listQuery.pageSize"
-      @pagination="getList" />
+      @pagination="pageChange" />
   </div>
 </template>
 
@@ -100,15 +100,16 @@ export default {
       tableKey: 0,
       list: null,
       total: 0,
+      allTotal: 0,
       listLoading: true,
       allList: null,
+      searchList: null,
       listQuery: {
         currentPage: 1,
         pageSize: 15,
         title: '',
       },
       downloadLoading: false,
-      picList: []
     }
   },
   created() {
@@ -129,6 +130,7 @@ export default {
         const { list, total } = response.data
         this.list = list
         this.total = total
+        this.allTotal = total
         this.allList = this.list
         setTimeout(() => {
           this.listLoading = false
@@ -171,10 +173,14 @@ export default {
 
     },
     searchBlank() {
+      // 进行搜索时,重新获取list,所以要将分页恢复默认
       let title = this.listQuery.title
       searchBook(title).then(response => {
         console.log(response)
-        this.list = response.data
+        this.searchList = response.data
+        this.total = this.searchList.length
+        this.listQuery.currentPage = 1
+        this.pageChange()
       }).catch(err => {
         this.list = this.allList
         console.log(err);
@@ -216,7 +222,28 @@ export default {
 
 
     },
-
+    pageChange() {
+      // 判断走后台接口的分页查询还是走前端自己的分页功能
+      const total = this.total
+      const allTotal = this.allTotal
+      if (total < allTotal) {
+        // 说明正在查询,走前端自己的分页功能
+        const list = this.searchList
+        const currentPage = this.listQuery.currentPage
+        const pageSize = this.listQuery.pageSize
+        // 改变pageList,取成当前list的部分内容,渲染到页面
+        let pageList = []
+        const listEnd = list.length - 1
+        const queryEnd = currentPage * pageSize - 1
+        const end = listEnd < queryEnd ? listEnd : queryEnd
+        for (let start = (currentPage - 1) * pageSize; start <= end; start++) {
+          pageList.push(list[start])
+        }
+        this.list = pageList
+      }else {
+        this.getList()
+      }
+    }
   },
 }
 </script>
