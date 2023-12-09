@@ -99,25 +99,7 @@ export default {
       this.fileList = [],
       this.filesLength = 0
     },
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-    handlePreview(file) {
-      console.log(file);
-    },
 
-    beforeUpload(file) {
-
-    },
-
-    handleSuccess(response, file, fileList) {
-      // alert("上传成功")
-      console.log("存储路径:" + response.virtualPath)
-      console.log("文件名:" + response.fileName)
-      alert(response.fileName)
-      this.fileinfo.virtualPath = response.virtualPath;
-      this.uploadPic(file)
-    },
     uploadRequest(options) {
       // let file = options.file
       // let fd = new FormData();
@@ -143,6 +125,7 @@ export default {
             console.log(dataObj);
             console.log(response);
             this.resetForm()
+            this.$refs.upload.clearFiles()
             alert('提交成功!')
           })
       }).catch(err => {
