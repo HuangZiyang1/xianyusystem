@@ -53,14 +53,15 @@ export function uploadService(data) {
     url: '/admin/service/insertService',
     method: 'post',
     data: {
-      serviceName: data.title,
+      serviceName: data.serviceName,
       isOnTop: data.isOnTop,
       userId: 1,
       highPrice: data.highPrice,
       lowPrice: data.lowPrice,
-      title: '1',
+      title: data.title,
       info: data.info,
-      urlList: []
+      urlList: [],
+      contact: ''
     }
   })
 }

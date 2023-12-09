@@ -75,6 +75,13 @@ export default {
   },
   methods: {
     removeBook(item) {
+      if (this.dynamicValidateForm.books.length === 1) {
+        this.$message({
+          message: '至少上传一本书籍!',
+          type: 'info'
+        })
+        return
+      }
       var index = this.dynamicValidateForm.books.indexOf(item)
       if (index !== -1) {
         this.dynamicValidateForm.books.splice(index, 1)
@@ -103,7 +110,9 @@ export default {
         })
         return
       }
-      this.$refs.upload.submit()
+      // 校验一下状态
+      const flag = this.$refs.upload.submit()
+      console.log(flag);
       setTimeout(() => {
         this.$refs[formName].validate((valid) => {
           if (valid) {

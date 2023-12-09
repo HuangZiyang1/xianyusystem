@@ -8,10 +8,16 @@
       <el-form-item prop="info" label="闲置套装介绍" :rules="[{ required: true, message: '请输入闲置介绍', trigger: 'blur' }]">
         <el-input v-model="dynamicValidateForm.info" type="textarea" />
       </el-form-item>
-      <el-form-item label="最低价格" prop="lowPrice" :rules="[{ required: true, message: '请输入最低价格', trigger: 'blur' }]">
+      <!-- <el-form-item label="最低价格" prop="lowPrice" :rules="[{ required: true, message: '请输入最低价格', trigger: 'blur' }]">
         <el-input v-model.number="dynamicValidateForm.lowPrice" />
       </el-form-item>
       <el-form-item label="最高价格" prop="highPrice" :rules="[{ required: true, message: '请输入最高价格', trigger: 'blur' }]">
+        <el-input v-model.number="dynamicValidateForm.highPrice" />
+      </el-form-item> -->
+      <el-form-item label="最低价格" prop="lowPrice" :rules="[{ type:'number',required: true, message: '请输入最低价格，且价格必须为数字', trigger: 'blur' }]">
+        <el-input v-model.number="dynamicValidateForm.lowPrice" />
+      </el-form-item>
+      <el-form-item label="最高价格" prop="highPrice" :rules="[{type:'number', required: true, message: '请输入最高价格，且价格必须为数字', trigger: 'blur' ,whitespace:[{type: 'string', message: '只存在空格', whitespace: true, trigger: ['change','blur']}]}]">
         <el-input v-model.number="dynamicValidateForm.highPrice" />
       </el-form-item>
       <el-form-item label="是否置顶" prop="isOnTop">
