@@ -14,7 +14,7 @@
       border
       fit
       highlight-current-row
-      :default-sort="{prop: 'serviceId', order: 'descending'}"
+      :default-sort="{prop: 'serviceId', order: 'ascending'}"
       style="width: 100%;"
     >
       <el-table-column label="服务id" prop="serviceId" sortable align="center" width="120">
@@ -27,15 +27,9 @@
           <span>{{ row.createTime }}</span>
         </template>
       </el-table-column>
-      <!-- <el-table-column label="服务图片" min-width="120" width="150" style="display:flex;align-items: center;">
-        <template slot-scope="{row}">
-          <img :src="row.pictureList ? row.pictureList[0].url : ''" alt="" style="height:60px;width:auto">
-        </template>
-      </el-table-column> -->
       <el-table-column label="服务名称" width="500" align="center">
         <template slot-scope="{row}">
             <span style="margin-right:6px;">{{ row.serviceName }}</span>
-            <!-- <span>书籍ISBN号：{{ item.isbn }}</span> -->
         </template>
       </el-table-column>
       <el-table-column label="服务简介" width="110" align="center">
@@ -73,7 +67,8 @@
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    <pagination v-show="total > 0" :total="total" :page.sync="listQuery.currentPage" :limit.sync="listQuery.pageSize"
+      @pagination="getList" />
   </div>
 </template>
 
@@ -94,8 +89,8 @@ export default {
       listLoading: true,
       allList: null,
       listQuery: {
-        page: 1,
-        limit: 20,
+        currentPage: 1,
+        pageSize: 20,
         title: '',
       },
       downloadLoading: false,
@@ -108,8 +103,14 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      fetchList().then(response => {
-        this.list = response.data
+      const params = {
+        currentPage: this.listQuery.currentPage,
+        pageSize: this.listQuery.pageSize
+      }
+      fetchList(params).then(response => {
+        const { list, total } = response.data
+        this.list = list
+        this.total = total
         this.allList = this.list
         setTimeout(() => {
           this.listLoading = false

@@ -7,7 +7,7 @@
       border
       fit
       highlight-current-row
-      :default-sort="{prop: 'imgId', order: 'descending'}"
+      :default-sort="{prop: 'imgId', order: 'ascending'}"
       style="width: 100%;"
     >
       <el-table-column label="广告id" prop="imgId" sortable align="center" width="120">

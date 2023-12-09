@@ -15,7 +15,7 @@
     border
     fit
     highlight-current-row
-    :default-sort="{prop: 'suitId', order: 'descending'}"
+    :default-sort="{prop: 'suitId', order: 'ascending'}"
     style="width: 100%;">
       <el-table-column label="书籍套装id" prop="suitId" sortable align="center" width="120">
         <template slot-scope="{row}">
@@ -81,13 +81,13 @@
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total > 0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit"
+    <pagination :total="total" :page.sync="listQuery.currentPage" :limit.sync="listQuery.pageSize"
       @pagination="getList" />
   </div>
 </template>
 
 <script>
-import { deleteByBookSuitId, fetchList, searchBook, topBook, cancelTopBook } from '@/api/book'
+import { deleteByBookSuitId, fetchList, searchBook, topBook, cancelTopBook, getAllGoods } from '@/api/book'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
@@ -103,8 +103,8 @@ export default {
       listLoading: true,
       allList: null,
       listQuery: {
-        page: 1,
-        limit: 20,
+        currentPage: 1,
+        pageSize: 15,
         title: '',
       },
       downloadLoading: false,
@@ -113,12 +113,22 @@ export default {
   },
   created() {
     this.getList()
+
+  },
+  computed: {
+
   },
   methods: {
     getList() {
       this.listLoading = true
-      fetchList().then(response => {
-        this.list = response.data
+      const params = {
+        currentPage: this.listQuery.currentPage,
+        pageSize: this.listQuery.pageSize
+      }
+      fetchList(params).then(response => {
+        const { list, total } = response.data
+        this.list = list
+        this.total = total
         this.allList = this.list
         setTimeout(() => {
           this.listLoading = false

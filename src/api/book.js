@@ -1,10 +1,22 @@
 import request from '@/utils/request'
 
-export function fetchList() {
+export function getAllGoods() {
   return request({
-    url: '/admin/book/selectBookAll?currentPage=1&&pageSize=5',
+    url: '/admin/book/selectBookAll',
     method: 'get',
-    // params: query,
+    params: {
+      currentPage: 1,
+      pageSize: 1000000
+    }
+    // baseURL: 'http://192.168.3.133:8080'
+  })
+}
+
+export function fetchList(params) {
+  return request({
+    url: '/admin/book/selectBookAll',
+    method: 'get',
+    params
     // baseURL: 'http://192.168.3.133:8080'
   })
 }

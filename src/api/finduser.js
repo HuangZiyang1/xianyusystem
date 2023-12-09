@@ -1,9 +1,10 @@
 import request from '@/utils/request'
 
-export function fetchList() {
+export function fetchList(params) {
   return request({
-    url: '/admin/user/getAllUsers?currentPage=1&&pageSize=5',
+    url: '/admin/user/getAllUsers',
     method: 'get',
+    params
   })
 }
 
