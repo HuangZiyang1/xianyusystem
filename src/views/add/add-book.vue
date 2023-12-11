@@ -154,7 +154,8 @@ export default {
         isOnTop: 0
       },
         this.fileList = []
-        this.filesLength = 0
+        this.filesLength = 0,
+        this.$refs.upload.clearFiles()
     },
     uploadRequest(options) {
       this.fileList.push(options.file)
