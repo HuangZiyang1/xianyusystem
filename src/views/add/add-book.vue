@@ -19,7 +19,7 @@
         </el-switch>
       </el-form-item>
       <el-form-item label="联系方式" prop="concact">
-        <el-input v-model="dynamicValidateForm.concact" placeholder="若不填，则为默认联系方式" />
+        <el-input v-model="phone" />
       </el-form-item>
       <el-form-item label="图片上传(最多9张)" :prop="'books.0'" :rules="[{required: true, message: '请上传图片'}]">
         <el-upload class="upload-demo" ref="upload" action="#" :limit='9'
@@ -52,6 +52,7 @@
 import { uploadBooks } from '@/api/book'
 import { getToken } from '@/utils/auth'
 import { upLoadFile } from '@/api/uploadFile'
+import { getAdminInfo, postPhoneAPI } from '@/api/user'
 export default {
   data() {
     return {
@@ -71,8 +72,15 @@ export default {
       },
       fileList: [],
       token: getToken(),
-      filesLength: 0
+      filesLength: 0,
+      phone: ''
     }
+  },
+  mounted() {
+    getAdminInfo().then(response => {
+      const { phone } = response.data
+      this.phone = phone
+    })
   },
   methods: {
     changeFileLength(file, fileList) {
@@ -108,19 +116,7 @@ export default {
 
     },
     submitForm(formName) {
-      // if (this.dynamicValidateForm.urlList[0] === '') {
-      //   this.$message({
-      //     message: '没有上传图片',
-      //     type: 'info'
-      //   })
-      //   return
-      // }
-      // 校验一下状态
-      // const flag =
 
-      // console.log(flag);
-      // setTimeout(() => {
-        // console.log('666');
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.$refs.upload.submit()
@@ -161,14 +157,7 @@ export default {
         this.filesLength = 0
     },
     uploadRequest(options) {
-      // let file = options.file
-      // let fd = new FormData();
-      // fd.append('files', file)
-      // console.log(fd);
-
       this.fileList.push(options.file)
-      console.log(this.fileList);
-      console.log('888');
       if (this.fileList.length == this.filesLength) {
         // 创建formdata并上传
         let fd = new FormData()
@@ -177,7 +166,6 @@ export default {
         })
         upLoadFile(fd).then(response => {
         console.log(response);
-        // this.dynamicValidateForm.urlList.push(response.urls)
         // 切割urls
         this.dynamicValidateForm.urlList = response.urls.split(',')
         if(this.$refs.dynamicValidateForm.model.isOnTop === true) {
@@ -198,9 +186,11 @@ export default {
             }
             uploadBooks(data).then(response => {
               // console.log(data);
-              alert('提交成功!')
-              this.$refs.upload.clearFiles()
-              this.resetForm()
+              postPhoneAPI(this.phone).then(response => {
+                alert('提交成功!')
+                this.$refs.upload.clearFiles()
+                this.resetForm()
+              })
             }).catch(err => {
               console.log(err);
             })

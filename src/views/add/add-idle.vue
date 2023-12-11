@@ -33,7 +33,7 @@
       </el-form-item>
 
       <el-form-item label="联系方式" prop="concact">
-        <el-input v-model="dynamicValidateForm.concact" placeholder="若不填，则为默认联系方式" />
+        <el-input v-model="phone" />
       </el-form-item>
 
       <el-form-item>
@@ -48,6 +48,7 @@
 import { uploadIdle } from '@/api/idle'
 import { getToken } from '@/utils/auth'
 import { upLoadFile } from '@/api/uploadFile'
+import { getAdminInfo, postPhoneAPI } from '@/api/user'
 export default {
   data() {
     return {
@@ -64,8 +65,15 @@ export default {
       },
       fileList: [],
       token: getToken(),
-      filesLength: 0
+      filesLength: 0,
+      phone: ''
     }
+  },
+  mounted() {
+    getAdminInfo().then(response => {
+      const { phone } = response.data
+      this.phone = phone
+    })
   },
   methods: {
     changeFileLength(file, fileList) {
@@ -79,14 +87,20 @@ export default {
       // 判断表单
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$refs.upload.submit()
-
-          if (this.$refs.dynamicValidateForm.model.isOnTop === true) {
+          // console.log('表单校验通过');
+          // console.log(this.fileList.length);
+      // console.log(this.filesLength);
+      if (this.$refs.dynamicValidateForm.model.isOnTop === true) {
             this.$refs.dynamicValidateForm.model.isOnTop = 1
           } else {
             this.$refs.dynamicValidateForm.model.isOnTop = 0
           }
-    
+
+          if (this.filesLength) {
+            this.$refs.upload.submit()
+          } else {
+            this.submitFormWithoutPic()
+          }
 
         } else {
           console.log('error submit!!')
@@ -110,12 +124,16 @@ export default {
       }
       this.fileList = []
       this.filesLength = 0
+      this.$refs.upload.clearFiles()
     },
     uploadRequest(options) {
       // let file = options.file
       // let fd = new FormData();
       // fd.append('files', file)
       // console.log(fd);
+      console.log('进入上传');
+      console.log(this.fileList.length);
+      console.log(this.filesLength);
       this.fileList.push(options.file)
       if (this.fileList.length == this.filesLength) {
         // 创建FormData上传
@@ -129,9 +147,11 @@ export default {
           // 切割urls
           this.dynamicValidateForm.urlList = response.urls.split(',')
           uploadIdle(this.$refs.dynamicValidateForm.model).then(response => {
-            this.resetForm()
-            alert('提交成功!')
-            this.$refs.upload.clearFiles()
+            postPhoneAPI(this.phone).then(response => {
+              this.resetForm()
+              alert('提交成功!')
+              this.$refs.upload.clearFiles()
+            })
           }).catch(err => {
             console.log(err);
           })
@@ -140,6 +160,17 @@ export default {
         })
       }
 
+    },
+    submitFormWithoutPic() {
+      uploadIdle(this.$refs.dynamicValidateForm.model).then(response => {
+            postPhoneAPI(this.phone).then(response => {
+              this.resetForm()
+              alert('提交成功!')
+              this.$refs.upload.clearFiles()
+            })
+          }).catch(err => {
+            console.log(err);
+          })
     }
   }
 

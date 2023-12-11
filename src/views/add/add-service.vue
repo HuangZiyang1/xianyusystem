@@ -27,7 +27,7 @@
         </el-switch>
       </el-form-item>
       <el-form-item label="联系方式" prop="concact">
-        <el-input v-model="dynamicValidateForm.concact" placeholder="若不填，则为默认联系方式" />
+        <el-input v-model="phone" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm('dynamicValidateForm')">提交</el-button>
@@ -39,6 +39,7 @@
 
 <script>
 import { uploadService } from '@/api/service'
+import { getAdminInfo, postPhoneAPI } from '@/api/user'
 
 export default {
   data() {
@@ -51,8 +52,15 @@ export default {
         highPrice: '',
         concact: '',
         isOnTop: 0,
-      }
+      },
+      phone: ''
     }
+  },
+  mounted() {
+    getAdminInfo().then(response => {
+      const { phone } = response.data
+      this.phone = phone
+    })
   },
   methods: {
     removeBook(item) {
@@ -70,6 +78,7 @@ export default {
           }else {
             this.$refs.dynamicValidateForm.model.isOnTop = 0
           }
+          postPhoneAPI(this.phone)
           uploadService(this.$refs.dynamicValidateForm.model).then(response => {
             this.resetForm()
             alert('提交成功!')
