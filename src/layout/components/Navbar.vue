@@ -11,6 +11,9 @@
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
+          <el-dropdown-item divided @click.native="updatePhone">
+            <span style="display:block;">修改联系方式</span>
+          </el-dropdown-item>
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">登出</span>
           </el-dropdown-item>
@@ -24,6 +27,7 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
+import { postPhoneAPI } from '@/api/user'
 
 export default {
   components: {
@@ -45,6 +49,24 @@ export default {
       await this.$store.dispatch('user/logout')
       // 跳转到登录页面
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    },
+    updatePhone() {
+      this.$prompt('联系方式', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      }).then(({ value }) => {
+        postPhoneAPI(value).then(response => {
+          this.$message({
+            type: 'success',
+            message: '成功修改联系方式 ' + value
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '取消更改'
+        })
+      })
     }
   }
 }
