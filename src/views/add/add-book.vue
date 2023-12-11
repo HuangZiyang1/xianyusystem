@@ -58,16 +58,16 @@ export default {
     return {
       dynamicValidateForm: {
         books: [{
-          bookName: '1',
-          isbn: '1234567890000',
+          bookName: '',
+          isbn: '',
           publishingHouse: '1'
         }],
-        info: '0',
-        lowPrice: 1,
-        highPrice: 2,
+        info: '',
+        lowPrice: '',
+        highPrice: '',
         urlList: [],
         concact: '',
-        title: '666',
+        title: '',
         isOnTop: 0,
       },
       fileList: [],

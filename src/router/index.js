@@ -91,6 +91,12 @@ export const constantRoutes = [
         component: () => import('@/views/worktable/search-user'),
         meta: { title: '查询用户', icon: '' },
       },
+      {
+        path: 'notice',
+        name: 'SearchUser',
+        component: () => import('@/views/worktable/search-notice'),
+        meta: { title: '查询通知', icon: '' },
+      },
 
     ]
   },
@@ -123,6 +129,12 @@ export const constantRoutes = [
         name: 'AddAd',
         component: () => import('@/views/add/add-ad'),
         meta: { title: '添加广告', icon: '' },
+      },
+      {
+        path: 'notice',
+        name: 'AddNotice',
+        component: () => import('@/views/add/add-notice'),
+        meta: { title: '添加通知', icon: '' },
       },
     ]
   },
