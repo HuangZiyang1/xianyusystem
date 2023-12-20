@@ -158,35 +158,47 @@ export default {
         this.$refs.upload.clearFiles()
     },
     uploadRequest(options) {
+      // 这个函数在执行文件上传组件el-upload的时候被触发,机制是点击提交后,从文件列表一次装载一个文件(这个是特殊机制,你们考虑wx那边)
+      // options打印出来是一个一个文件的,所以一个一个push进去我们的fileList
       this.fileList.push(options.file)
+      // filesLength是计算属性,实时计算上述文件列表的真实长度,当装载完了之后触发if里面内容
       if (this.fileList.length == this.filesLength) {
         // 创建formdata并上传
         let fd = new FormData()
+        // 把fileList装到formdata实例化对象中
         this.fileList.forEach(file => {
+          // 后台要求参数名字为files
           fd.append('files', file)
         })
+        // 走网络请求,从后台拿到response,response里面有一系列参数,只要url就行了
         upLoadFile(fd).then(response => {
         console.log(response);
-        // 切割urls
+        // 上面上传时,fd实质上是一个数组,就是多个文件调用一次接口上传,后台返回的urls是一个有多个url的字符串
+        // 切割urls,并装到urlList数组中
         this.dynamicValidateForm.urlList = response.urls.split(',')
+        // 处理其他参数
         if(this.$refs.dynamicValidateForm.model.isOnTop === true) {
             this.$refs.dynamicValidateForm.model.isOnTop = 1
           }else {
             this.$refs.dynamicValidateForm.model.isOnTop = 0
           }
             const model = this.$refs.dynamicValidateForm.model
+            // 创建data多此一举的原因是,我的参数名和后台要求的不一样,我不想改我的
             const data = {
               book: model.books,
               info: model.info,
               lowPrice: model.lowPrice,
               highPrice: model.highPrice,
               urlList: model.urlList,
+              // 这个contact我没删,反正body多了没关系后台不要
               concact: model.concact,
               title: model.title,
               isOnTop: model.isOnTop
             }
+            // 走上传书籍接口
             uploadBooks(data).then(response => {
               // console.log(data);
+              // 后台要求同时刷新一次phone
               postPhoneAPI(this.phone).then(response => {
                 alert('提交成功!')
                 this.$refs.upload.clearFiles()

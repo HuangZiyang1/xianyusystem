@@ -17,55 +17,55 @@
     highlight-current-row
     :default-sort="{prop: 'suitId', order: 'ascending'}"
     style="width: 100%;">
-      <el-table-column label="书籍套装id" prop="suitId" sortable align="center" width="120">
+      <el-table-column label="书籍套装id" prop="suitId" sortable align="center">
         <template slot-scope="{row}">
           <span>{{ row.suitId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="发布时间" width="200" align="center">
+      <el-table-column label="发布时间" align="center">
         <template slot-scope="{row}">
           <span>{{ row.createTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="书籍图片" min-width="120" width="150" style="display:flex;align-items: center;">
+      <el-table-column label="书籍图片" min-width="120" style="display:flex;align-items: center;">
         <template slot-scope="{row}">
           <img :src="row.pictures[0] ? row.pictures[0].url : ''" alt="图片无法显示" style="height:60px;width:auto">
         </template>
       </el-table-column>
-      <el-table-column label="书籍套装标题" width="110" align="center">
+      <el-table-column label="书籍套装标题" align="center">
         <template slot-scope="{row}">
           <span>{{ row.title }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="书籍套装各书籍" width="500" align="center">
+      <el-table-column label="书籍套装各书籍" align="left" min-width="300">
         <template slot-scope="{row}">
-          <el-row v-for="item in row.books" :key="item.bookId">
-            <span style="margin-right:6px;">书籍名称：{{ item.bookName }}</span>
-            <span>书籍ISBN号：{{ item.isbn }}</span>
+          <el-row v-for="item in row.books" :key="item.bookId" style="display: flex;white-space: nowrap;">
+            <span style="margin-right:6px;">书名：{{ item.bookName }}</span>
+            <span>ISBN：{{ item.isbn }}</span>
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="书籍套装简介" width="110" align="center">
+      <el-table-column label="书籍套装简介" align="center">
         <template slot-scope="{row}">
           <span>{{ row.info }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="书籍套装上传者" width="110" align="center">
+      <el-table-column label="书籍套装上传者" align="center">
         <template slot-scope="{row}">
           <span>{{ row.userId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="书籍套装价格区间" width="110" align="center">
+      <el-table-column label="书籍套装价格区间" align="center">
         <template slot-scope="{row}">
           <span>{{ row.lowPrice + '~' + row.highPrice }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="浏览数" align="center" width="65">
+      <el-table-column label="浏览数" align="center">
         <template slot-scope="{row}">
           <span class="link-type">{{ row.pageView }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="185" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" min-width="180">
         <template slot-scope="{row,$index}">
           <!-- <div>{{ row }}</div> -->
           <el-button v-if="row.isOnTop != 1" size="mini" type="primary" @click="handleTop(row, $index)">

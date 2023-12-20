@@ -17,28 +17,28 @@
       :default-sort="{prop: 'noticeId', order: 'ascending'}"
       style="width: 100%;"
     >
-      <el-table-column label="通知id" prop="noticeId" sortable align="center" width="120">
+      <el-table-column label="通知id" prop="noticeId" sortable align="center">
         <template slot-scope="{row}">
           <span>{{ row.noticeId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="发布时间" width="200" align="center">
+      <el-table-column label="发布时间" align="center">
         <template slot-scope="{row}">
           <span>{{ row.publishTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="通知名称" width="500" align="center">
+      <el-table-column label="通知名称" align="center">
         <template slot-scope="{row}">
           <span style="margin-right:6px;">{{ row.title }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="通知内容" width="110" align="center">
+      <el-table-column label="通知内容" align="center">
         <template slot-scope="{row}">
           <span>{{ row.content }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="操作" align="center" width="235" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="180" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">
             删除

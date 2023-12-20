@@ -10,43 +10,43 @@
       :default-sort="{prop: 'imgId', order: 'ascending'}"
       style="width: 100%;"
     >
-      <el-table-column label="广告id" prop="imgId" sortable align="center" width="120">
+      <el-table-column label="广告id" prop="imgId" sortable align="center">
         <template slot-scope="{row}">
           <span>{{ row.imgId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="广告名称" align="center" width="120">
+      <el-table-column label="广告名称" align="center">
         <template slot-scope="{row}">
           <span>{{ row.title }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="广告信息" width="200" align="center">
+      <el-table-column label="广告信息" align="center">
         <template slot-scope="{row}">
           <span>{{ row.info }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="广告更新时间" width="200" align="center">
+      <el-table-column label="广告更新时间" align="center">
         <template slot-scope="{row}">
           <span>{{ row.updateTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="广告截止时间" width="200" align="center">
+      <el-table-column label="广告截止时间" align="center">
         <template slot-scope="{row}">
           <span>{{ row.endTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="广告展示的图片" width="400" align="center">
+      <el-table-column label="广告展示的图片" align="center" min-width="250">
         <template slot-scope="{row}">
           <!-- <span>{{ row.url }}</span> -->
-          <img :src="row.url" alt="图片无法显示" style="width:300px;height:auto">
+          <img :src="row.url" alt="图片无法显示" style="width:100%;height:auto">
         </template>
       </el-table-column>
-      <el-table-column label="广告跳转的地址（外链）" width="110" align="center">
+      <el-table-column label="广告跳转的地址（外链）" align="center">
         <template slot-scope="{row}">
           <span>{{ row.link }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="235" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button v-if="row.status!=1" size="mini" type="danger" @click="handleDelete(row,$index)">
             删除

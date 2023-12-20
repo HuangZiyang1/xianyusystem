@@ -17,42 +17,42 @@
       :default-sort="{prop: 'serviceId', order: 'ascending'}"
       style="width: 100%;"
     >
-      <el-table-column label="服务id" prop="serviceId" sortable align="center" width="120">
+      <el-table-column label="服务id" prop="serviceId" sortable align="center">
         <template slot-scope="{row}">
           <span>{{ row.serviceId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="发布时间" width="200" align="center">
+      <el-table-column label="发布时间" align="center">
         <template slot-scope="{row}">
           <span>{{ row.createTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="服务名称" width="500" align="center">
+      <el-table-column label="服务名称" align="center">
         <template slot-scope="{row}">
             <span style="margin-right:6px;">{{ row.title }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="服务简介" width="110" align="center">
+      <el-table-column label="服务简介" align="center">
         <template slot-scope="{row}">
           <span>{{ row.info }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="服务上传者" width="110" align="center">
+      <el-table-column label="服务上传者" align="center">
         <template slot-scope="{row}">
           <span>{{ row.userId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="服务价格区间" width="110" align="center">
+      <el-table-column label="服务价格区间" align="center">
         <template slot-scope="{row}">
           <span>{{ row.lowPrice + '~' + row.highPrice }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="浏览数" align="center" width="65">
+      <el-table-column label="浏览数" align="center">
         <template slot-scope="{row}">
           <span class="link-type">{{ row.pageView }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="235" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="180" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button v-if="row.isOnTop!=1" size="mini" type="primary" @click="handleTop(row,$index)">
             置顶

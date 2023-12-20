@@ -17,12 +17,12 @@
     highlight-current-row
     :default-sort="{prop: 'userId', order: 'ascending'}"
     style="width: 100%;">
-      <el-table-column label="用户id" prop="userId" sortable align="center" width="120">
+      <el-table-column label="用户id" prop="userId" sortable align="center">
         <template slot-scope="{row}">
           <span>{{ row.userId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="注册时间" width="200" align="center">
+      <el-table-column label="注册时间" align="center">
         <template slot-scope="{row}">
           <span>{{ row.createTime }}</span>
         </template>
@@ -32,18 +32,18 @@
           <img :src="row.pictureList ? row.pictureList[0].url : ''" alt="" style="height:60px;width:auto">
         </template>
       </el-table-column> -->
-      <el-table-column label="用户名称" width="500" align="center">
+      <el-table-column label="用户名称" align="center">
         <template slot-scope="{row}">
           <span style="margin-right:6px;">{{ row.nickName }}</span>
           <!-- <span>书籍ISBN号：{{ item.isbn }}</span> -->
         </template>
       </el-table-column>
-      <el-table-column label="联系方式" width="110" align="center">
+      <el-table-column label="联系方式" align="center">
         <template slot-scope="{row}">
           <span>{{ row.phone }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="235" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="210" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button v-if="row.status != '1'" size="mini" type="danger" @click="handleDelete(row, $index)">
             封禁

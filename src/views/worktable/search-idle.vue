@@ -10,50 +10,50 @@
 
     <el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row
       :default-sort="{ prop: 'businessId', order: 'ascending' }" style="width: 100%;">
-      <el-table-column label="闲置id" prop="businessId" sortable align="center" width="120">
+      <el-table-column label="闲置id" prop="businessId" sortable align="center">
         <template slot-scope="{row}">
           <span>{{ row.businessId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="发布时间" width="200" align="center">
+      <el-table-column label="发布时间" align="center">
         <template slot-scope="{row}">
           <span>{{ row.createTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="闲置图片" min-width="120" width="150" style="display:flex;align-items: center;">
+      <el-table-column label="闲置图片" min-width="120" style="display:flex;align-items: center;">
         <template slot-scope="{row}">
           <img :src="row.pictureList !== null ? row.pictureList[0] ? row.pictureList[0].url : '' : ''" alt="图片无法显示"
             style="height:60px;width:auto">
         </template>
       </el-table-column>
-      <el-table-column label="闲置名称" width="500" align="center">
+      <el-table-column label="闲置名称" min-width="250" align="center">
         <template slot-scope="{row}">
           <span style="margin-right:6px;">{{ row.title }}</span>
           <!-- <span>书籍ISBN号：{{ item.isbn }}</span> -->
 
         </template>
       </el-table-column>
-      <el-table-column label="闲置简介" width="110" align="center">
+      <el-table-column label="闲置简介" align="center">
         <template slot-scope="{row}">
           <span>{{ row.info }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="闲置上传者" width="110" align="center">
+      <el-table-column label="闲置上传者" align="center">
         <template slot-scope="{row}">
           <span>{{ row.userId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="闲置价格区间" width="110" align="center">
+      <el-table-column label="闲置价格区间" align="center">
         <template slot-scope="{row}">
           <span>{{ row.lowPrice + '~' + row.highPrice }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="浏览数" align="center" width="65">
+      <el-table-column label="浏览数" align="center" >
         <template slot-scope="{row}">
           <span class="link-type">{{ row.pageView }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="235" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="180" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button v-if="row.isOnTop != 1" size="mini" type="primary" @click="handleTop(row, $index)">
             置顶
